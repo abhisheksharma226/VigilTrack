@@ -1,0 +1,133 @@
+import Link from 'next/link'
+import { Header } from '@/components/header'
+import { Button } from '@/components/ui/button'
+import { MapPin, Calendar, ArrowRight } from 'lucide-react'
+
+const cases = [
+  {
+    id: 'CASE-2024-001',
+    name: 'Sarah Johnson',
+    age: 28,
+    status: 'active',
+    missingDate: '2024-01-15',
+    location: 'Portland, OR',
+    matchCount: 2,
+  },
+  {
+    id: 'CASE-2024-003',
+    name: 'Michael Chen',
+    age: 34,
+    status: 'active',
+    missingDate: '2024-01-20',
+    location: 'Seattle, WA',
+    matchCount: 0,
+  },
+  {
+    id: 'CASE-2024-007',
+    name: 'Emily Davis',
+    age: 26,
+    status: 'closed',
+    missingDate: '2024-02-03',
+    location: 'Eugene, OR',
+    matchCount: 3,
+  },
+  {
+    id: 'CASE-2024-012',
+    name: 'Jennifer Smith',
+    age: 29,
+    status: 'active',
+    missingDate: '2024-01-28',
+    location: 'Bend, OR',
+    matchCount: 1,
+  },
+]
+
+export default function CasesPage() {
+  return (
+    <div className="min-h-screen bg-black text-white">
+      <Header />
+
+      {/* Hero Section */}
+      <section className="border-b border-gray-800 pt-20 pb-16 px-6">
+        <div className="mx-auto max-w-5xl">
+          <h1 className="text-5xl font-serif font-bold mb-4">Active Cases</h1>
+          <p className="text-lg text-gray-400">
+            Browse currently active and resolved missing person cases
+          </p>
+        </div>
+      </section>
+
+      {/* Cases Grid */}
+      <section className="py-24 px-6">
+        <div className="mx-auto max-w-5xl">
+          <div className="grid md:grid-cols-2 gap-8">
+            {cases.map((caseItem) => (
+              <Link key={caseItem.id} href={`/cases/${caseItem.id}`}>
+                <div className="border border-gray-800 hover:border-cyan-500/50 transition-all duration-300 p-8 rounded-sm group h-full flex flex-col hover:bg-gray-900/50">
+                  {/* Header */}
+                  <div className="flex items-start justify-between mb-6">
+                    <div className="flex-1">
+                      <h3 className="text-2xl font-bold mb-2 group-hover:text-cyan-400 transition-colors">{caseItem.name}</h3>
+                      <p className="text-sm text-gray-500 font-mono">{caseItem.id}</p>
+                    </div>
+                    <div className={`px-3 py-1 rounded-sm text-sm font-semibold ${
+                      caseItem.status === 'active' 
+                        ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50' 
+                        : 'bg-green-500/20 text-green-400 border border-green-500/50'
+                    }`}>
+                      {caseItem.status === 'active' ? 'ACTIVE' : 'CLOSED'}
+                    </div>
+                  </div>
+
+                  {/* Details */}
+                  <div className="space-y-4 mb-8 flex-1 border-t border-gray-800 pt-6">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-500">AGE</span>
+                      <span className="text-white font-semibold">{caseItem.age} years old</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm">
+                      <MapPin className="h-4 w-4 text-gray-500" />
+                      <span className="text-gray-300">{caseItem.location}</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm">
+                      <Calendar className="h-4 w-4 text-gray-500" />
+                      <span className="text-gray-300">Missing {caseItem.missingDate}</span>
+                    </div>
+                  </div>
+
+                  {/* Matches */}
+                  <div className="border-t border-gray-800 pt-6 mb-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="text-2xl font-bold text-cyan-400">{caseItem.matchCount}</div>
+                        <div className="text-sm text-gray-500">
+                          sighting{caseItem.matchCount !== 1 ? 's' : ''} matched
+                        </div>
+                      </div>
+                      <div className="text-right text-sm text-gray-400">
+                        {caseItem.matchCount > 0 && 'Active leads'}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* CTA */}
+                  <Button className="w-full bg-cyan-400 text-black hover:bg-cyan-300 rounded-sm font-semibold group-hover:translate-x-0 transition-all gap-2">
+                    View Details
+                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-gray-800 py-12 px-6">
+        <div className="max-w-5xl mx-auto text-center text-gray-500 text-sm">
+          <p>Have information about a case? Report a sighting from your account.</p>
+        </div>
+      </footer>
+    </div>
+  )
+}
