@@ -39,39 +39,42 @@ export default function DevelopersPage() {
 
       {/* Team Grid */}
       <section className="py-24 px-6">
-        <div className="mx-auto max-w-6xl">
-          <div className="grid md:grid-cols-2 gap-12">
-            {developers.map((dev) => (
-              <div key={dev.id} className="group">
-                {/* Developer Card */}
-                <div className="border border-gray-800 hover:border-cyan-500/50 transition-all duration-300 rounded-sm overflow-hidden">
-                  {/* Image Area */}
-                  <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-pink-500/10 group-hover:from-cyan-500/20 group-hover:to-pink-500/20 transition-all duration-300" />
+        <div className="mx-auto max-w-6xl space-y-8">
+          {developers.map((dev) => (
+            <div key={dev.id} className="group">
+              {/* Horizontal Developer Card */}
+              <div className="border border-gray-800 hover:border-cyan-500/50 transition-all duration-300 rounded-sm overflow-hidden flex flex-col md:flex-row">
+                {/* Image Area - Left Side */}
+                <div className="md:w-1/3 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center relative overflow-hidden min-h-80 md:min-h-96">
+                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-pink-500/10 group-hover:from-cyan-500/20 group-hover:to-pink-500/20 transition-all duration-300" />
+                  <div className="relative z-10 w-full h-full">
                     <Image
                         src={dev.image} // "/Abhishekk.jpg"
                         alt={dev.name}
                         fill // makes the image cover the parent div
                         className="object-cover"
+                        // style={{ objectFit: "contain" }}
                       />
                   </div>
+                </div>
 
-                  {/* Content */}
-                  <div className="p-8 border-t border-gray-800">
+                {/* Content - Right Side */}
+                <div className="md:w-2/3 p-8 md:p-12 border-t md:border-t-0 md:border-l border-gray-800 flex flex-col justify-between">
+                  <div>
                     <div className="mb-6">
-                      <h3 className="text-2xl font-bold mb-1">{dev.name}</h3>
+                      <h3 className="text-3xl font-bold mb-2">{dev.name}</h3>
                       <p className="text-cyan-400 font-semibold text-sm tracking-wide uppercase mb-2">
                         {dev.role}
                       </p>
-                      <p className="text-gray-400">{dev.title}</p>
+                      <p className="text-gray-400 text-lg">{dev.title}</p>
                     </div>
 
-                    <p className="text-gray-400 mb-6 leading-relaxed">
+                    <p className="text-gray-400 mb-8 leading-relaxed text-base">
                       {dev.bio}
                     </p>
 
                     {/* Specialties */}
-                    <div className="mb-8 pb-8 border-t border-gray-800 pt-8">
+                    <div className="mb-8">
                       <p className="text-xs text-gray-500 uppercase tracking-wider mb-3">Specialties</p>
                       <div className="flex flex-wrap gap-2">
                         {dev.specialties.map((skill) => (
@@ -84,39 +87,39 @@ export default function DevelopersPage() {
                         ))}
                       </div>
                     </div>
+                  </div>
 
-                    {/* Social Links */}
-                    <div className="flex gap-4">
-                      <a 
-                        href={dev.social.github}
-                        className="flex-1 flex items-center justify-center gap-2 border border-gray-700 hover:border-cyan-500 text-gray-400 hover:text-cyan-400 transition-colors py-2 rounded-sm"
-                        title="GitHub"
-                      >
-                        <Github className="h-4 w-4" />
-                        <span className="text-xs">GitHub</span>
-                      </a>
-                      <a 
-                        href={dev.social.linkedin}
-                        className="flex-1 flex items-center justify-center gap-2 border border-gray-700 hover:border-cyan-500 text-gray-400 hover:text-cyan-400 transition-colors py-2 rounded-sm"
-                        title="LinkedIn"
-                      >
-                        <Linkedin className="h-4 w-4" />
-                        <span className="text-xs">LinkedIn</span>
-                      </a>
-                      <a 
-                        href={`mailto:${dev.social.email}`}
-                        className="flex-1 flex items-center justify-center gap-2 border border-gray-700 hover:border-cyan-500 text-gray-400 hover:text-cyan-400 transition-colors py-2 rounded-sm"
-                        title="Email"
-                      >
-                        <Mail className="h-4 w-4" />
-                        <span className="text-xs">Email</span>
-                      </a>
-                    </div>
+                  {/* Social Links */}
+                  <div className="flex gap-4">
+                    <a 
+                      href={dev.social.github}
+                      className="flex-1 flex items-center justify-center gap-2 border border-gray-700 hover:border-cyan-500 text-gray-400 hover:text-cyan-400 transition-colors py-3 rounded-sm font-semibold"
+                      title="GitHub"
+                    >
+                      <Github className="h-5 w-5" />
+                      <span className="hidden sm:inline">GitHub</span>
+                    </a>
+                    <a 
+                      href={dev.social.linkedin}
+                      className="flex-1 flex items-center justify-center gap-2 border border-gray-700 hover:border-cyan-500 text-gray-400 hover:text-cyan-400 transition-colors py-3 rounded-sm font-semibold"
+                      title="LinkedIn"
+                    >
+                      <Linkedin className="h-5 w-5" />
+                      <span className="hidden sm:inline">LinkedIn</span>
+                    </a>
+                    <a 
+                      href={`mailto:${dev.social.email}`}
+                      className="flex-1 flex items-center justify-center gap-2 border border-gray-700 hover:border-cyan-500 text-gray-400 hover:text-cyan-400 transition-colors py-3 rounded-sm font-semibold"
+                      title="Email"
+                    >
+                      <Mail className="h-5 w-5" />
+                      <span className="hidden sm:inline">Email</span>
+                    </a>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </section>
 

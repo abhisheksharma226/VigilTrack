@@ -9,7 +9,7 @@ const _inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: 'Missing Person Image Matcher',
   description: 'A secure and official platform for identifying missing individuals using AI-powered facial feature matching.',
-  generator: 'v0.app',
+  generator: 'Abhishek Sharma',
   icons: {
     icon: [
       {
