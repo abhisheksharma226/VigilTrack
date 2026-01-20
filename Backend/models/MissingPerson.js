@@ -5,6 +5,7 @@ const missingSchema = new mongoose.Schema({
   age: Number,
   gender: String,
   lastSeenLocation: String,
+  contactInfo: String,
   notes: String,
   imageUrl: String,
   embeddingId: {

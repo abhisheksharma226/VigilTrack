@@ -16,6 +16,10 @@ const sightingSchema = new mongoose.Schema(
     reportedBy: {
       type: String
     },
+    reportedTime: {
+      type: Date,
+      default: Date.now
+    },
     embeddingId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Embedding"

@@ -1,7 +1,7 @@
 'use client'
 
-import React from 'react'
-import { useState } from 'react'
+import React, { useState } from 'react'
+import axios from 'axios'
 import { Header } from '@/components/header'
 import { MatchVisualizer } from '@/components/match-visualizer'
 import { Button } from '@/components/ui/button'
@@ -20,8 +20,10 @@ export default function ReportMissingPage() {
     contactInfo: '',
     notes: '',
   })
+  const [photoFile, setPhotoFile] = useState<File | null>(null)
   const [photoPreview, setPhotoPreview] = useState<string | null>(null)
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -35,6 +37,7 @@ export default function ReportMissingPage() {
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
+      setPhotoFile(file)
       const reader = new FileReader()
       reader.onloadend = () => {
         setPhotoPreview(reader.result as string)
@@ -44,13 +47,39 @@ export default function ReportMissingPage() {
   }
 
   const handleRemovePhoto = () => {
+    setPhotoFile(null)
     setPhotoPreview(null)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSubmitted(true)
+    if (!photoFile) return alert("Please upload a photo")
+
+    setLoading(true)
+    try {
+      const data = new FormData()
+      data.append('image', photoFile)
+      data.append('name', formData.name)
+      data.append('age', formData.age)
+      data.append('gender', formData.gender)
+      data.append('lastSeenLocation', formData.lastLocation)
+      data.append('notes', formData.notes)
+      data.append('contactInfo', formData.contactInfo)
+
+      const res = await axios.post('http://localhost:5000/api/missing', data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+
+      console.log("Missing person API response:", res.data)
+      setSubmitted(true)
+    } catch (error: any) {
+      console.error("Upload failed:", error)
+      alert("Failed to submit report: " + (error.response?.data?.error || error.message))
+    } finally {
+      setLoading(false)
+    }
   }
+
 
   if (submitted) {
     return (

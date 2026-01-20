@@ -5,7 +5,7 @@ import cloudinary from "../config/cloudinary.js";
 
 export const createMissing = async (req, res) => {
   try {
-    const { name, age, gender, lastSeenLocation, notes } = req.body;
+    const { name, age, gender, lastSeenLocation,contactInfo, notes } = req.body;
     const image = req.file;
 
     if (!image) {
@@ -40,6 +40,7 @@ export const createMissing = async (req, res) => {
       age,
       gender,
       lastSeenLocation,
+      contactInfo,
       notes,
       imageUrl: uploaded.secure_url
     });

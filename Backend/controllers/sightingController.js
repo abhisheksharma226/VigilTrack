@@ -5,7 +5,7 @@ import axios from "axios";
 
 export const createSighting = async (req, res) => {
   try {
-    const { location, description, reportedBy } = req.body;
+    const { location, description, reportedTime, reportedBy } = req.body;
     const image = req.file;
 
     if (!image) return res.status(400).json({ error: "Image is required" });
@@ -37,6 +37,7 @@ export const createSighting = async (req, res) => {
       imageUrl: uploaded.secure_url,
       location,
       description,
+      reportedTime: reportedTime ? new Date(reportedTime) : undefined, // if not sent, Mongoose default will apply
       reportedBy
     });
 
