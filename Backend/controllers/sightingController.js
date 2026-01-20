@@ -8,9 +8,7 @@ export const createSighting = async (req, res) => {
     const { location, description, reportedBy } = req.body;
     const image = req.file;
 
-    if (!image) {
-      return res.status(400).json({ error: "Image is required" });
-    }
+    if (!image) return res.status(400).json({ error: "Image is required" });
 
     // 1️⃣ Upload image to Cloudinary
     const uploaded = await new Promise((resolve, reject) => {
@@ -23,34 +21,35 @@ export const createSighting = async (req, res) => {
       ).end(image.buffer);
     });
 
-    // 2️⃣ Generate AI embedding (STEP 4)
+    // 2️⃣ Generate AI embedding
     const aiRes = await axios.post(
       `${process.env.AI_URL}/ai/embedding`,
       { imageUrl: uploaded.secure_url },
       { headers: { "Content-Type": "application/json" } }
     );
 
-    // 🔴 IMPORTANT: use "embedding", not "vector"
-    const embeddingVector = aiRes.data.embedding;
-
-    if (!embeddingVector || embeddingVector.length === 0) {
+    if (!aiRes.data.embedding || aiRes.data.embedding.length === 0) {
       return res.status(500).json({ error: "AI embedding failed" });
     }
 
-    // 3️⃣ Save embedding
-    const embeddingDoc = await Embedding.create({
-      vector: embeddingVector,
-      type: "sighting"
-    });
-
-    // 4️⃣ Save sighting with embedding reference
+    // 3️⃣ Save sighting
     const sighting = await Sighting.create({
       imageUrl: uploaded.secure_url,
       location,
       description,
-      reportedBy,
-      embeddingId: embeddingDoc._id
+      reportedBy
     });
+
+    // 4️⃣ Save embedding with type and refId
+    const embeddingDoc = await Embedding.create({
+      vector: aiRes.data.embedding,
+      type: "sighting",
+      refId: sighting._id
+    });
+
+    // 5️⃣ Update sighting with embeddingId
+    sighting.embeddingId = embeddingDoc._id;
+    await sighting.save();
 
     return res.status(201).json({
       success: true,

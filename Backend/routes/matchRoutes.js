@@ -1,10 +1,11 @@
 import express from "express";
 import upload from "../middleware/upload.js";
-import { matchPerson } from "../controllers/matchController.js";
+import { match } from "../controllers/matchController.js";
 
 const router = express.Router();
 
-// Police can upload image OR send sightingEmbeddingId
-router.post("/", upload.single("image"), matchPerson);
+// POST /api/match
+// Either form-data image OR JSON { sightingEmbeddingId }
+router.post("/", upload.single("image"), match);
 
 export default router;

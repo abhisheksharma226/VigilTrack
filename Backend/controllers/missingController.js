@@ -23,31 +23,37 @@ export const createMissing = async (req, res) => {
       ).end(image.buffer);
     });
 
-    // 2️⃣ Call AI service (running on 9000)
-    
+    // 2️⃣ Call AI service
     const aiRes = await axios.post(
       process.env.AI_URL + "/ai/embedding",
       { imageUrl: uploaded.secure_url },
       { headers: { "Content-Type": "application/json" } }
     );
-    
-    console.log("AI response:", aiRes.data);
-    // 3️⃣ Save embedding
-    const embeddingDoc = await Embedding.create({
-      vector: aiRes.data.embedding   // <-- was aiRes.data.vector before
-    });
-    
 
-    // 4️⃣ Save missing person
+    if (!aiRes.data.embedding || aiRes.data.embedding.length === 0) {
+      return res.status(500).json({ error: "AI embedding failed" });
+    }
+
+    // 3️⃣ Save missing person
     const person = await MissingPerson.create({
       name,
       age,
       gender,
       lastSeenLocation,
       notes,
-      imageUrl: uploaded.secure_url,
-      embeddingId: embeddingDoc._id
+      imageUrl: uploaded.secure_url
     });
+
+    // 4️⃣ Save embedding with proper type and refId
+    const embeddingDoc = await Embedding.create({
+      vector: aiRes.data.embedding,
+      type: "missing",
+      refId: person._id
+    });
+
+    // 5️⃣ Update missing person with embeddingId
+    person.embeddingId = embeddingDoc._id;
+    await person.save();
 
     return res.status(201).json({
       success: true,

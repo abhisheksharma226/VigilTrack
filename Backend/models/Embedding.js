@@ -5,6 +5,15 @@ const embeddingSchema = new mongoose.Schema({
     type: [Number],
     required: true
   },
+  type: {
+    type: String,
+    enum: ["missing", "sighting"],
+    required: true
+  },
+  refId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  },
   createdAt: { type: Date, default: Date.now }
 });
 
