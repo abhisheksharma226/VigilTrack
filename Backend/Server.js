@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/missing", missingRoutes);
-app.use("/api/sighting", sightingRoutes);
+app.use("/api/sightings", sightingRoutes);
 app.use("/api/match", matchRoutes);
 
 // console.log('Cloud name:', process.env.CLOUDINARY_CLOUD_NAME);

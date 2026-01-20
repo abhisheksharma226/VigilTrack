@@ -1,7 +1,10 @@
 import express from "express";
-import { getMatches } from "../controllers/matchController.js";
+import upload from "../middleware/upload.js";
+import { matchPerson } from "../controllers/matchController.js";
 
 const router = express.Router();
-router.get("/:id", getMatches);
+
+// Police can upload image OR send sightingEmbeddingId
+router.post("/", upload.single("image"), matchPerson);
 
 export default router;

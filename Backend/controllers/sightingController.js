@@ -1,45 +1,65 @@
 import Sighting from "../models/Sighting.js";
 import Embedding from "../models/Embedding.js";
-import axios from "axios";
 import cloudinary from "../config/cloudinary.js";
+import axios from "axios";
 
 export const createSighting = async (req, res) => {
   try {
-    const { location, description } = req.body;
+    const { location, description, reportedBy } = req.body;
     const image = req.file;
 
-    // Upload to Cloudinary
+    if (!image) {
+      return res.status(400).json({ error: "Image is required" });
+    }
+
+    // 1️⃣ Upload image to Cloudinary
     const uploaded = await new Promise((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream(
-        { folder: "sightings" },
+      cloudinary.uploader.upload_stream(
+        { folder: "VigilTrack/sightings" },
         (error, result) => {
           if (error) reject(error);
           else resolve(result);
         }
-      );
-      stream.end(image.buffer);
+      ).end(image.buffer);
     });
 
-    // Send image to AI microservice
+    // 2️⃣ Generate AI embedding (STEP 4)
     const aiRes = await axios.post(
-      process.env.AI_URL + "/extract",
-      image.buffer,
-      { headers: { "Content-Type": "application/octet-stream" } }
+      `${process.env.AI_URL}/ai/embedding`,
+      { imageUrl: uploaded.secure_url },
+      { headers: { "Content-Type": "application/json" } }
     );
 
-    const embed = await Embedding.create({ vector: aiRes.data.vector });
+    // 🔴 IMPORTANT: use "embedding", not "vector"
+    const embeddingVector = aiRes.data.embedding;
 
-    const sight = await Sighting.create({
+    if (!embeddingVector || embeddingVector.length === 0) {
+      return res.status(500).json({ error: "AI embedding failed" });
+    }
+
+    // 3️⃣ Save embedding
+    const embeddingDoc = await Embedding.create({
+      vector: embeddingVector,
+      type: "sighting"
+    });
+
+    // 4️⃣ Save sighting with embedding reference
+    const sighting = await Sighting.create({
       imageUrl: uploaded.secure_url,
       location,
       description,
-      embeddingId: embed._id
+      reportedBy,
+      embeddingId: embeddingDoc._id
     });
 
-    res.json({ msg: "Sighting submitted", sight });
+    return res.status(201).json({
+      success: true,
+      message: "Sighting uploaded & embedding generated",
+      sighting
+    });
 
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
+  } catch (error) {
+    console.error("SIGHTING ERROR:", error);
+    res.status(500).json({ error: error.message });
   }
 };
