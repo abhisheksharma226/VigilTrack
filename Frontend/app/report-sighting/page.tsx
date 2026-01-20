@@ -225,7 +225,8 @@ export default function ReportSightingPage() {
             </div>
           </div>
 
-          <Button type="submit" disabled={loading} className="w-full h-12">
+              
+          <Button type="submit" disabled={loading} className="w-full h-12 flex-1 btn-animate bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white h-12 gap-2">
             {loading ? 'Submitting...' : 'Submit Sighting'}
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>

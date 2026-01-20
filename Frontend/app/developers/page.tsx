@@ -11,8 +11,8 @@ const developers = [
     name: 'Abhishek Sharma',
     role: 'Lead Developer',
     title: 'Full Stack Engineer',
-    bio: 'Building AI-powered and Full stack solutions for complex problems. Expert in Backend, and Cloud Architecture.',
-    specialties: ['Full Stack', 'Backend', 'Cloud Architecture'],
+    bio: 'Lead engineer behind VigilTrack, building secure AI-driven systems for identifying missing individuals and assisting in criminal recognition. Focused on reliability, ethical AI, and technology that supports public safety and law enforcement operations.',
+    specialties: ['AI Identification Systems', 'Secure Backend Engineering', 'Scalable Cloud Infrastructure'],
     image: '/Abhishekk.jpg',
     social: {
       github: 'https://github.com/abhisheksharma226/',
@@ -32,7 +32,7 @@ export default function DevelopersPage() {
         <div className="mx-auto max-w-5xl">
           <h1 className="text-5xl font-serif font-bold mb-4">Our Team</h1>
           <p className="text-lg text-gray-400">
-            Meet the talented developers and team members building the future of missing person identification
+            Meet the team behind VigilTrack — an AI-powered platform designed to assist in missing person recovery and criminal identification through secure, responsible technology.
           </p>
         </div>
       </section>
@@ -130,11 +130,12 @@ export default function DevelopersPage() {
           
           <div className="grid md:grid-cols-4 gap-8">
             {[
-              { number: '50+', label: 'Cases Solved' },
-              { number: '2000+', label: 'Hours Invested' },
-              { number: '98%', label: 'Code Quality' },
-              { number: '24/7', label: 'Support' }
-            ].map((stat, i) => (
+                { number: 'AI-Driven', label: 'Face Recognition' },
+                { number: 'Missing & Crime', label: 'Case Support' },
+                { number: 'Secure', label: 'Evidence Handling' },
+                { number: '24/7', label: 'System Monitoring' }
+              ]
+              .map((stat, i) => (
               <div key={i} className="text-center">
                 <div className="text-4xl font-bold text-cyan-400 mb-2">{stat.number}</div>
                 <div className="text-sm text-gray-500 uppercase tracking-wider">{stat.label}</div>
@@ -148,11 +149,13 @@ export default function DevelopersPage() {
       <section className="border-t border-gray-800 py-24 px-6">
         <div className="mx-auto max-w-4xl">
           <div className="text-center space-y-8">
-            <h2 className="text-4xl font-serif font-bold">Our Mission</h2>
+          <h2 className="text-4xl font-serif font-bold">
+              Our Mission — Public Safety Through Responsible AI
+            </h2>
             <p className="text-lg text-gray-400 leading-relaxed">
-              We are a dedicated team of developers, designers, and product specialists committed to leveraging advanced AI and technology to reunite missing individuals with their families. Every line of code, every pixel, and every decision we make is driven by the mission to bring hope and closure to those who need it most.
+              VigilTrack is built to support both missing person investigations and criminal identification efforts using advanced AI technology. Our mission is to provide a secure, ethical, and reliable platform that assists law enforcement agencies and the public in identifying individuals, accelerating investigations, and enhancing public safety.
             </p>
-            
+
             <div className="border-t border-gray-800 pt-12">
               <h3 className="text-2xl font-bold mb-6">Get in Touch</h3>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -175,7 +178,7 @@ export default function DevelopersPage() {
       {/* Footer */}
       <footer className="border-t border-gray-800 py-12 px-6">
         <div className="max-w-6xl mx-auto text-center text-gray-500 text-sm">
-          <p>Built with purpose. Driven by mission.</p>
+        <p>AI for justice. Technology for public safety.</p>
         </div>
       </footer>
     </div>
