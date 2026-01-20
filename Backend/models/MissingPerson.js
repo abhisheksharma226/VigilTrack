@@ -7,7 +7,10 @@ const missingSchema = new mongoose.Schema({
   lastSeenLocation: String,
   notes: String,
   imageUrl: String,
-  embeddingId: String, 
+  embeddingId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Embedding"
+  },
   createdAt: { type: Date, default: Date.now }
 });
 

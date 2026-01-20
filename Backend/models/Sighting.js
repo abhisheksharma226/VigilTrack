@@ -1,11 +1,9 @@
-import mongoose from "mongoose";
+import express from "express";
+import upload from "../middleware/upload.js";
+import { createSighting } from "../controllers/sightingController.js";
 
-const sightingSchema = new mongoose.Schema({
-  imageUrl: String,
-  location: String,
-  description: String,
-  embeddingId: String,
-  createdAt: { type: Date, default: Date.now }
-});
+const router = express.Router();
 
-export default mongoose.model("Sighting", sightingSchema);
+router.post("/", upload.single("image"), createSighting);
+
+export default router;

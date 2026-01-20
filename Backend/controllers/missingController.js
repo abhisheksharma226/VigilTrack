@@ -8,27 +8,37 @@ export const createMissing = async (req, res) => {
     const { name, age, gender, lastSeenLocation, notes } = req.body;
     const image = req.file;
 
-    // Upload to Cloudinary
+    if (!image) {
+      return res.status(400).json({ error: "Image is required" });
+    }
+
+    // 1️⃣ Upload to Cloudinary
     const uploaded = await new Promise((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream(
-        { folder: "missing_persons" },
+      cloudinary.uploader.upload_stream(
+        { folder: "VigilTrack/missing_persons" },
         (error, result) => {
           if (error) reject(error);
           else resolve(result);
         }
-      );
-      stream.end(image.buffer);
+      ).end(image.buffer);
     });
 
-    // Send image to AI microservice
+    // 2️⃣ Call AI service (running on 9000)
+    
     const aiRes = await axios.post(
-      process.env.AI_URL + "/extract",
-      image.buffer,
-      { headers: { "Content-Type": "application/octet-stream" } }
+      process.env.AI_URL + "/ai/embedding",
+      { imageUrl: uploaded.secure_url },
+      { headers: { "Content-Type": "application/json" } }
     );
+    
+    console.log("AI response:", aiRes.data);
+    // 3️⃣ Save embedding
+    const embeddingDoc = await Embedding.create({
+      vector: aiRes.data.embedding   // <-- was aiRes.data.vector before
+    });
+    
 
-    const embed = await Embedding.create({ vector: aiRes.data.vector });
-
+    // 4️⃣ Save missing person
     const person = await MissingPerson.create({
       name,
       age,
@@ -36,13 +46,17 @@ export const createMissing = async (req, res) => {
       lastSeenLocation,
       notes,
       imageUrl: uploaded.secure_url,
-      embeddingId: embed._id
+      embeddingId: embeddingDoc._id
     });
 
-    res.json({ msg: "Missing report added", person });
+    return res.status(201).json({
+      success: true,
+      message: "Missing person saved successfully",
+      person
+    });
 
   } catch (err) {
-    console.error(err);
+    console.error("ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 };

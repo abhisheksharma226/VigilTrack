@@ -1,8 +1,11 @@
 import mongoose from "mongoose";
 
-const embedSchema = new mongoose.Schema({
-  vector: [Number],
+const embeddingSchema = new mongoose.Schema({
+  vector: {
+    type: [Number],
+    required: true
+  },
   createdAt: { type: Date, default: Date.now }
 });
 
-export default mongoose.model("Embedding", embedSchema);
+export default mongoose.model("Embedding", embeddingSchema);
