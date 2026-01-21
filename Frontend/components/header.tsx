@@ -23,8 +23,8 @@ export function Header() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="text-2xl font-serif font-bold text-white">MP</div>
-            <div className="hidden sm:block text-sm tracking-wider text-gray-400">FINDER</div>
+            <div className="text-2xl font-serif font-bold text-white">VT</div>
+            <div className="hidden sm:block text-sm tracking-wider text-gray-400">VigilTrack</div>
           </Link>
 
           {/* Navigation - Desktop */}

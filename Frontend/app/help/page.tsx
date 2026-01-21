@@ -43,7 +43,7 @@ export default function HelpPage() {
                 Reach out regarding the project or collaboration
               </p>
               <p className="text-cyan-400 font-mono">
-                abhishek.dev@gmail.com
+                sharmaabhi2226@gmail.com
               </p>
             </div>
 

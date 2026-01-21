@@ -444,7 +444,7 @@ export default function DocumentsPage() {
       {/* Footer */}
       <footer className="border-t border-gray-800 py-12 px-6">
         <div className="max-w-5xl mx-auto text-center text-gray-500 text-sm">
-          <p>© 2026 MP Finder Documentation. For questions, contact support@mpfinder.com</p>
+          <p>© 2026 Vigil Track Documentation. For questions, contact sharmaabhi2226@gmail.com</p>
         </div>
       </footer>
     </div>
