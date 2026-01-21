@@ -36,7 +36,7 @@ def export_model():
 
     print("✅ ONNX model exported")
 
-export_model()
+# export_model()
 
 # -----------------------------
 # Load ONNX model

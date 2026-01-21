@@ -1,6 +1,6 @@
 __pycache__/
-*.onnx
-*.onnx.data
+# *.onnx
+# *.onnx.data
 .env
 venv/
 .venv/
