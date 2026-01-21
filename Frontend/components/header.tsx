@@ -11,6 +11,7 @@ export function Header() {
   const navLinks = [
     { href: '/report-missing', label: 'Report Missing' },
     { href: '/report-sighting', label: 'Report Sighting' },
+    { href: '/matching', label: 'AI Matching', badge: 'NEW' },
     { href: '/cases', label: 'Cases' },
     { href: '/documents', label: 'Documentation' },
     { href: '/developers', label: 'Developers' },
