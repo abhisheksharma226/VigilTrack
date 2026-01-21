@@ -45,16 +45,16 @@ export default function DevelopersPage() {
               {/* Horizontal Developer Card */}
               <div className="border border-gray-800 hover:border-cyan-500/50 transition-all duration-300 rounded-sm overflow-hidden flex flex-col md:flex-row">
                 {/* Image Area - Left Side */}
-                <div className="md:w-1/3 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center relative overflow-hidden min-h-80 md:min-h-96">
+                <div className="w-full md:w-1/3 bg-gradient-to-br from-gray-800 to-gray-900 relative overflow-hidden h-[280px] md:h-[380px]">
                   <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-pink-500/10 group-hover:from-cyan-500/20 group-hover:to-pink-500/20 transition-all duration-300" />
                   <div className="relative z-10 w-full h-full">
-                    <Image
-                        src={dev.image} // "/Abhishekk.jpg"
-                        alt={dev.name}
-                        fill // makes the image cover the parent div
-                        className="object-cover"
-                        // style={{ objectFit: "contain" }}
-                      />
+                  <Image
+                      src={dev.image}
+                      alt={dev.name}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="object-cover"
+                    />
                   </div>
                 </div>
 
