@@ -142,7 +142,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t border-gray-800 py-12 px-6">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 text-gray-500 text-sm">
-          <p>© 2024 Missing Person Matcher. All rights reserved.</p>
+          <p>© 2026 Missing Person Matcher. All rights reserved.</p>
           <div className="flex gap-8">
             <a href="#" className="hover:text-white transition-colors">Privacy</a>
             <a href="#" className="hover:text-white transition-colors">Terms</a>
