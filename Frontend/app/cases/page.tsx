@@ -74,7 +74,7 @@ export default function CasesPage() {
                     <div className="flex items-start justify-between mb-6">
                       <div className="flex-1">
                         <h3 className="text-2xl font-bold mb-2 group-hover:text-cyan-400 transition-colors">{caseItem.name}</h3>
-                        <p className="text-sm text-gray-500 font-mono">{caseItem._id}</p>
+                        <p className="text-sm text-gray-500 font-mono"> CaseId : {caseItem._id}</p>
                       </div>
                       <div className={`px-3 py-1 rounded-sm text-sm font-semibold ${
                         'ACTIVE' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50' : 'bg-green-500/20 text-green-400 border border-green-500/50'
