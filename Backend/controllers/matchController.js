@@ -1,7 +1,7 @@
 import Embedding from "../models/Embedding.js";
 import MissingPerson from "../models/MissingPerson.js";
-import cloudinary from "../config/cloudinary.js";
 import axios from "axios";
+import FormData from "form-data";
 import { cosineSimilarity } from "../utils/similarity.js";
 
 const THRESHOLD = 0.65;
@@ -13,27 +13,24 @@ export const match = async (req, res) => {
     // OPTION 1: Using existing sighting embedding
     if (req.body.sightingEmbeddingId) {
       const sightingEmbedding = await Embedding.findById(req.body.sightingEmbeddingId);
-      if (!sightingEmbedding) return res.status(404).json({ error: "Sighting embedding not found" });
+      if (!sightingEmbedding) {
+        return res.status(404).json({ error: "Sighting embedding not found" });
+      }
       queryVector = sightingEmbedding.vector;
     }
 
-    // OPTION 2: Upload new image
+    // OPTION 2: Upload image (EXACT SAME AS createMissing)
     if (req.file) {
-      const uploaded = await new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-          { folder: "VigilTrack/match_images" },
-          (err, result) => {
-            if (err) reject(err);
-            else resolve(result);
-          }
-        );
-        stream.end(req.file.buffer);
+      const form = new FormData();
+      form.append("file", req.file.buffer, {
+        filename: req.file.originalname,
+        contentType: req.file.mimetype,
       });
 
       const aiRes = await axios.post(
-        process.env.AI_URL + "/ai/embedding",
-        { imageUrl: uploaded.secure_url },
-        { headers: { "Content-Type": "application/json" } }
+        `${process.env.AI_URL}/ai/embedding`,
+        form,
+        { headers: form.getHeaders() }
       );
 
       if (!aiRes.data.embedding || aiRes.data.embedding.length === 0) {
@@ -43,7 +40,11 @@ export const match = async (req, res) => {
       queryVector = aiRes.data.embedding;
     }
 
-    if (!queryVector) return res.status(400).json({ error: "Provide sightingEmbeddingId or image" });
+    if (!queryVector) {
+      return res.status(400).json({
+        error: "Provide sightingEmbeddingId or upload image",
+      });
+    }
 
     // Fetch all missing embeddings
     const missingEmbeddings = await Embedding.find({ type: "missing" });
@@ -51,14 +52,18 @@ export const match = async (req, res) => {
 
     for (const m of missingEmbeddings) {
       if (!m.vector || m.vector.length === 0) continue;
+
       const score = cosineSimilarity(queryVector, m.vector);
 
       if (score >= THRESHOLD) {
         const person = await MissingPerson.findById(m.refId);
-        matches.push({
-          person,
-          similarity: +(score * 100).toFixed(2)
-        });
+
+        if (person) {
+          matches.push({
+            person,
+            similarity: +(score * 100).toFixed(2),
+          });
+        }
       }
     }
 
@@ -67,11 +72,10 @@ export const match = async (req, res) => {
     res.json({
       success: true,
       count: matches.length,
-      matches
+      matches,
     });
-
   } catch (err) {
-    console.error("MATCH ERROR:", err);
-    res.status(500).json({ error: err.message });
+    console.error("MATCH ERROR:", err.response?.data || err.message);
+    res.status(500).json({ error: err.response?.data || err.message });
   }
 };
