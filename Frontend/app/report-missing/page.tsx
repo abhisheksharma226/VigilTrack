@@ -11,6 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea'
 import { Upload, X, ArrowRight, AlertCircle } from 'lucide-react'
 
+
+
 export default function ReportMissingPage() {
   const [formData, setFormData] = useState({
     name: '',
@@ -24,6 +26,7 @@ export default function ReportMissingPage() {
   const [photoPreview, setPhotoPreview] = useState<string | null>(null)
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [caseId, setCaseId] = useState<string | null>(null)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -71,6 +74,7 @@ export default function ReportMissingPage() {
       })
 
       console.log("Missing person API response:", res.data)
+      setCaseId(res.data.person._id) // for showing the case id
       setSubmitted(true)
     } catch (error: any) {
       console.error("Upload failed:", error)
@@ -100,7 +104,7 @@ export default function ReportMissingPage() {
             </div>
             <div className="bg-indigo-500/10 border border-indigo-500/30 rounded-lg p-4 text-left">
               <p className="text-sm text-indigo-200">
-                <strong>Case ID:</strong> #MPF{Math.random().toString(36).substr(2, 9).toUpperCase()}
+              <strong>Case ID:</strong> VT{caseId}
               </p>
             </div>
             <Button 
