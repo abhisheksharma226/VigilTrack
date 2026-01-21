@@ -1,7 +1,11 @@
 import Sighting from "../models/Sighting.js";
 import Embedding from "../models/Embedding.js";
 import cloudinary from "../config/cloudinary.js";
+// import axios from "axios";
+// import FormData from "form-data";
 import axios from "axios";
+import { Blob } from "buffer";
+
 
 export const createSighting = async (req, res) => {
   try {
@@ -22,15 +26,36 @@ export const createSighting = async (req, res) => {
     });
 
     // 2️⃣ Generate AI embedding
-    const aiRes = await axios.post(
-      `${process.env.AI_URL}/ai/embedding`,
-      { imageUrl: uploaded.secure_url },
-      { headers: { "Content-Type": "application/json" } }
-    );
 
-    if (!aiRes.data.embedding || aiRes.data.embedding.length === 0) {
-      return res.status(500).json({ error: "AI embedding failed" });
-    }
+        const formData = new FormData();
+
+        // download image buffer from cloudinary URL
+        const imageResponse = await axios.get(uploaded.secure_url, {
+          responseType: "arraybuffer"
+        });
+
+        // append as file (this matches UploadFile in FastAPI)
+        formData.append(
+          "file",
+          new Blob([imageResponse.data]),
+          "sighting.jpg"
+        );
+
+        const aiRes = await axios.post(
+          `${process.env.AI_URL}/ai/embedding`,
+          formData,
+          {
+            headers: {
+              ...formData.getHeaders?.(), // safe for Node
+            },
+            timeout: 15000
+          }
+        );
+
+        if (!aiRes.data || !Array.isArray(aiRes.data.embedding)) {
+          return res.status(500).json({ error: "AI embedding failed" });
+        }
+
 
     // 3️⃣ Save sighting
     const sighting = await Sighting.create({
