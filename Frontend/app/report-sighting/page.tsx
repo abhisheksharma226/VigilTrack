@@ -79,7 +79,7 @@ export default function ReportSightingPage() {
       data.append('reportedTime', formData.reportedTime)
 
       const res = await axios.post(
-        'http://localhost:5000/api/sightings',
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sightings`,
         data,
         { headers: { 'Content-Type': 'multipart/form-data' } }
       )

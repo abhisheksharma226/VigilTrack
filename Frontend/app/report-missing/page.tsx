@@ -66,7 +66,7 @@ export default function ReportMissingPage() {
       data.append('notes', formData.notes)
       data.append('contactInfo', formData.contactInfo)
 
-      const res = await axios.post('http://localhost:5000/api/missing', data, {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/missing`, data, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
 
