@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from 'express';
 import cors from 'cors';
 import embedRoute from './routes/embed.route.js';
@@ -8,7 +11,7 @@ app.use(express.json());
 
 app.use('/ai', embedRoute);
 
-const PORT = 9000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
-  console.log(`🚀 AI Service running at http://localhost:${PORT}`);
+  console.log(`🚀 AI Service running at ${PORT}`);
 });
