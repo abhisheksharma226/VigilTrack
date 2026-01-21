@@ -306,15 +306,45 @@ export default function ReportMissingPage() {
             </div>
 
             {/* Submit Button */}
-            <div className="flex gap-4 fade-in" style={{ animationDelay: '200ms' }}>
-              <Button 
-                type="submit"
-                className="flex-1 btn-animate bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white h-12 gap-2"
-              >
-                <span>Submit Report</span>
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </div>
+            {/* Submit Button */}
+              <div className="flex gap-4 fade-in" style={{ animationDelay: '200ms' }}>
+                <Button
+                  type="submit"
+                  disabled={loading} // prevent multiple clicks
+                  className={`flex-1 btn-animate bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white h-12 gap-2 transition-all duration-300
+                    ${loading ? "w-12 rounded-full justify-center" : "rounded-xl"}
+                  `}
+                >
+                  {loading ? (
+                    <svg
+                      className="animate-spin h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v8H4z"
+                      ></path>
+                    </svg>
+                  ) : (
+                    <>
+                      <span>Submit Report</span>
+                      <ArrowRight className="h-4 w-4" />
+                    </>
+                  )}
+                </Button>
+              </div>
+
           </form>
         </div>
       </div>
