@@ -1,6 +1,18 @@
+# Python
 __pycache__/
-# *.onnx
-# *.onnx.data
-.env
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual env
 venv/
-.venv/
+.env
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+
+# Torch cache (local only)
+.cache/
