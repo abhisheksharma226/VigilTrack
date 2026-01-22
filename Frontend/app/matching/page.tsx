@@ -8,6 +8,10 @@ import { Button } from '@/components/ui/button'
 import { Search, Upload, AlertCircle, CheckCircle2, Zap } from 'lucide-react'
 import Loading from './loading'
 import { useRouter } from 'next/navigation'
+import { useRef } from 'react'
+
+// Inside your component
+
 
 
 export default function MatchingPage() {
@@ -17,6 +21,9 @@ export default function MatchingPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
+  
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
   const handleSearch = async () => {
     if (!embeddingId.trim()) {
@@ -59,6 +66,52 @@ export default function MatchingPage() {
   
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Matching failed')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleImageSearch = async () => {
+    if (!selectedFile) {
+      setError('Please select an image to search')
+      return
+    }
+
+  
+    setLoading(true)
+    setError('')
+  
+    try {
+      const formData = new FormData()
+      formData.append('file', selectedFile)
+  
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/match`,
+        {
+          method: 'POST',
+          body: formData
+        }
+      )
+
+      
+  
+      if (!response.ok) throw new Error('Failed to search matches by image')
+  
+      const data = await response.json()
+  
+      if (!data.matches || data.matches.length === 0) {
+        setError('No matches found for this image')
+        return
+      }
+  
+      // ✅ Save API response for match-results page
+      sessionStorage.setItem('vigiltrack_matches', JSON.stringify(data.matches))
+  
+      // ✅ Redirect to match-results page
+      router.push('/match-results')
+  
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Image matching failed')
     } finally {
       setLoading(false)
     }
@@ -206,18 +259,45 @@ export default function MatchingPage() {
             {/* Image Tab */}
             {activeTab === 'image' && (
               <div className="space-y-6">
-                <div className="border-2 border-dashed border-gray-700 rounded-sm p-8 text-center hover:border-cyan-400/50 transition-colors cursor-pointer">
+                <div
+                  className="border-2 border-dashed border-gray-700 rounded-sm p-8 text-center hover:border-cyan-400/50 transition-colors cursor-pointer"
+                  onClick={() => fileInputRef.current?.click()}
+                >
                   <Upload className="h-12 w-12 text-gray-500 mx-auto mb-4" />
                   <p className="text-gray-300 font-semibold mb-1">Upload an image</p>
                   <p className="text-sm text-gray-500">
                     Drag and drop or click to select an image for matching
                   </p>
+                  {selectedFile && <p className="text-sm text-cyan-400 mt-2">{selectedFile.name}</p>}
                 </div>
-                <p className="text-xs text-gray-500 text-center">
-                  Coming soon: Image-based matching feature
-                </p>
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  ref={fileInputRef}
+                  onChange={(e) => {
+                    if (e.target.files?.[0]) setSelectedFile(e.target.files[0])
+                  }}
+                />
+
+                <Button
+                  onClick={handleImageSearch}
+                  disabled={loading}
+                  className="w-full bg-cyan-500 hover:bg-cyan-600 text-black font-semibold py-3 rounded-sm transition-colors disabled:opacity-50"
+                >
+                  {loading ? (
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                      Searching...
+                    </div>
+                  ) : (
+                    'Search by Image'
+                  )}
+                </Button>
               </div>
             )}
+
 
             {/* Error Message */}
             {error && (
