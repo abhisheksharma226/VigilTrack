@@ -22,10 +22,10 @@ export default function DocumentsPage() {
         <div className="mx-auto max-w-5xl space-y-8 sm:space-y-16">
           {/* What is MP Finder */}
           <div className="border-b border-gray-800 pb-8 sm:pb-16">
-            <h2 className="text-2xl sm:text-4xl font-serif font-bold mb-4 sm:mb-8 text-cyan-400">What is MP Finder?</h2>
+            <h2 className="text-2xl sm:text-4xl font-serif font-bold mb-4 sm:mb-8 text-cyan-400">What is Vigil Track?</h2>
             <div className="space-y-6 text-gray-300 leading-relaxed">
               <p className="text-lg">
-                MP Finder is a next-generation missing person identification platform that combines advanced AI-powered facial recognition technology with verified law enforcement databases. Our system helps reunite families by enabling rapid matching between missing person reports and community sightings.
+                Vigil Track is a next-generation missing person identification platform that combines advanced AI-powered facial recognition technology with verified law enforcement databases. Our system helps reunite families by enabling rapid matching between missing person reports and community sightings.
               </p>
               <p>
                 The platform is built on the principle of collaborative safety - bringing together government agencies, law enforcement officials, and the public under one secure, transparent system. We leverage state-of-the-art machine learning algorithms to analyze facial features, physical characteristics, and contextual data to identify potential matches with unprecedented accuracy.
@@ -518,7 +518,7 @@ export default function DocumentsPage() {
       {/* Footer */}
       <footer className="border-t border-gray-800 py-8 sm:py-12 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto text-center text-gray-500 text-xs sm:text-sm">
-          <p>© 2024 MP Finder Documentation. For questions, contact support@mpfinder.com</p>
+          <p>© 2026 VigilTrack Documentation. For questions, contact sharmaabhi2226@gmail.com</p>
         </div>
       </footer>
     </div>

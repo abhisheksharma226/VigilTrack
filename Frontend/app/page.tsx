@@ -18,18 +18,27 @@ export default function Home() {
       <Header />
 
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center pt-20 pb-20 px-6">
-        <div className="relative z-10 max-w-5xl mx-auto text-center space-y-8">
+      <section className="relative min-h-screen flex items-center justify-center pt-20 pb-20 px-4 sm:px-6 overflow-hidden">
+      <div className="absolute inset-0 z-0">
+          <img 
+            src="/hero-reunion.jpg" 
+            alt="Family reunion through AI matching"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/40"></div>
+        </div>
+
+        <div className="relative z-10 max-w-4xl mx-auto text-center space-y-6 sm:space-y-8">
           {/* Subtitle */}
-          <div className="text-sm font-mono text-gray-400 tracking-widest uppercase">
-            FIND MISSING PERSONS
+          <div className="text-xs sm:text-sm font-mono text-cyan-400 tracking-widest uppercase">
+            REUNITING FAMILIES ACROSS INDIA
           </div>
 
           {/* Main Headline */}
-          <h1 className="text-7xl md:text-8xl font-serif font-bold tracking-tight leading-[1.1]">
-            Reunite Families with
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-pink-600">
-              Advanced AI
+          <h1 className="text-4xl sm:text-6xl md:text-8xl font-serif font-bold tracking-tight leading-[1.1] text-white">
+            Find Lost Loved Ones
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-pink-400">
+              With AI Power
             </span>
           </h1>
 
@@ -59,9 +68,9 @@ export default function Home() {
           {/* Stats Row */}
           <div className="grid grid-cols-3 gap-8 pt-16 border-t border-gray-800">
             {[
-              { number: '2,847', label: 'Active Cases' },
+              { number: '5', label: 'Active Cases' },
               { number: '94%', label: 'Success Rate' },
-              { number: '15.2K', label: 'Reports' }
+              { number: '10', label: 'Reports' }
             ].map((stat, i) => (
               <div key={i} className="text-center">
                 <div className="text-3xl font-bold text-cyan-400 mb-2">{stat.number}</div>
