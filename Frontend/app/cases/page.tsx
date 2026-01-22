@@ -70,6 +70,19 @@ export default function CasesPage() {
                 <Link key={caseItem._id} href={`/case`}>
                   <div className="border border-gray-800 hover:border-cyan-500/50 transition-all duration-300 p-8 rounded-sm group h-full flex flex-col hover:bg-gray-900/50">
                     
+                   {/* Image */}
+                  <div className="w-full h-56 mb-4 rounded-sm overflow-hidden bg-gray-800 flex items-center justify-center">
+                    {caseItem.imageUrl ? (
+                      <img
+                        src={caseItem.imageUrl}
+                        alt={caseItem.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="text-gray-500 text-4xl">👤</div>
+                    )}
+                  </div>
+
                     {/* Header */}
                     <div className="flex items-start justify-between mb-6">
                       <div className="flex-1">
