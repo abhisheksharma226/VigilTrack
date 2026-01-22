@@ -7,6 +7,8 @@ import { Header } from '@/components/header'
 import { Button } from '@/components/ui/button'
 import { Search, Upload, AlertCircle, CheckCircle2, Zap } from 'lucide-react'
 import Loading from './loading'
+import { useRouter } from 'next/navigation'
+
 
 export default function MatchingPage() {
   const [activeTab, setActiveTab] = useState<'embedding' | 'image'>('embedding')
@@ -14,39 +16,55 @@ export default function MatchingPage() {
   const [matches, setMatches] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const router = useRouter()
 
   const handleSearch = async () => {
     if (!embeddingId.trim()) {
       setError('Please enter an embedding ID')
       return
     }
-
+  
     setLoading(true)
     setError('')
-    setMatches([])
-
+  
     try {
-      // Mock API call - replace with actual API endpoint
-      const response = await fetch('/api/match', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ embeddingId: embeddingId.trim() })
-      })
-
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/match`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sightingEmbeddingId: embeddingId.trim()
+          })
+        }
+      )
+  
       if (!response.ok) throw new Error('Failed to search matches')
-
+  
       const data = await response.json()
-      setMatches(data.matches || [])
-
-      if (data.matches?.length === 0) {
-        setError('No matches found for this embedding ID')
+  
+      if (!data.matches || data.matches.length === 0) {
+        setError('No matches found')
+        return
       }
+  
+      // ✅ SAVE API RESPONSE
+      sessionStorage.setItem(
+        'vigiltrack_matches',
+        JSON.stringify(data.matches)
+      )
+  
+      // ✅ REDIRECT
+      router.push('/match-results')
+  
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred during matching')
+      setError(err instanceof Error ? err.message : 'Matching failed')
     } finally {
       setLoading(false)
     }
   }
+  
+
 
   return (
     <div className="min-h-screen bg-black text-white">
